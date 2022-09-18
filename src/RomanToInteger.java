@@ -1,11 +1,20 @@
 import java.util.EnumSet;
 
-/*
-https://leetcode.com/problems/roman-to-integer/
+/**
+ * <a
+ * href="https://leetcode.com/problems/roman-to-integer/">Roman to Integer</a>
  */
 public class RomanToInteger {
-    public static void main(String[] args) {
-        System.out.println(romanToInt("IXX"));
+    public static void main(String[] args) throws Exception {
+        System.out.println(romanToInt("CXLIV"));
+    }
+
+    enum InvalidPattern {
+        IIII,
+        XXXX,
+        LL,
+        CCCC,
+        DD;
     }
 
     enum RomanSymbol {
@@ -55,7 +64,8 @@ public class RomanToInteger {
         }
     }
 
-    private static int romanToInt(String s) {
+    private static int romanToInt(String s) throws Exception {
+        validate(s);
         char[] roman = s.toCharArray();
         int result = 0;
         for (int i = 0; i < roman.length; i++) {
@@ -72,5 +82,13 @@ public class RomanToInteger {
         }
         result -= SubtractionAnalyzer.analyze(s);
         return result;
+    }
+
+    private static void validate(String s) throws Exception {
+        if(EnumSet.allOf(InvalidPattern.class)
+                .stream()
+                .anyMatch(invalidPattern -> s.contains(invalidPattern.name())) ) {
+            throw new Exception("Invalid pattern.");
+        };
     }
 }
